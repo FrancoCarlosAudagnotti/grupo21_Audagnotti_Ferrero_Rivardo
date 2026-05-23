@@ -88,68 +88,68 @@ Case = namedtuple("Case", [
     # casos super simples donde hay que hacer casi nada
 
     Case(id="goal", description="sin muestras a recolectar, ya es meta",
-         rover=(0, 0), battery=20, shadows=[],
-         igneous=[], sediments=[],
-         expected_cost=0, time_limit_s=1),
+        rover=(0, 0), battery=20, shadows=[],
+        igneous=[], sediments=[],
+        expected_cost=0, time_limit_s=1),
 
     # casos simples donde hay que hacer muy poco, con una sola muestra
 
     Case(id="s1", description="una sola muestra a recolectar, con bateria de sobra",
-         rover=(0, 0), battery=20, shadows=[],
-         igneous=[(0, 1)], sediments=[],
-         expected_cost=7, time_limit_s=2),
+        rover=(0, 0), battery=20, shadows=[],
+        igneous=[(0, 1)], sediments=[],
+        expected_cost=7, time_limit_s=2),
 
     Case(id="s2", description="una sola muestra a recolectar del otro tipo",
-         rover=(0, 0), battery=20, shadows=[],
-         igneous=[], sediments=[(0, 1)],
-         expected_cost=7, time_limit_s=2),
+        rover=(0, 0), battery=20, shadows=[],
+        igneous=[], sediments=[(0, 1)],
+        expected_cost=7, time_limit_s=2),
 
     Case(id="s3", description="una sola muestra a recolectar, pero lo ideal es con overdive",
-         rover=(0, 0), battery=20, shadows=[],
-         igneous=[(0, 2)], sediments=[],
-         expected_cost=7, time_limit_s=2),
+        rover=(0, 0), battery=20, shadows=[],
+        igneous=[(0, 2)], sediments=[],
+        expected_cost=7, time_limit_s=2),
 
     Case(id="s4", description="una sola muestra a recolectar, pero hace falta cargar bateria antes",
-         rover=(0, 0), battery=1, shadows=[],
-         igneous=[(0, 1)], sediments=[],
-         expected_cost=11, time_limit_s=2),
+        rover=(0, 0), battery=1, shadows=[],
+        igneous=[(0, 1)], sediments=[],
+        expected_cost=11, time_limit_s=2),
 
     Case(id="s5", description="una sola muestra a recolectar, pero hace falta cargar bateria y no en el lugar donde estamos",
-         rover=(0, 0), battery=2, shadows=[(0, 0)],
-         igneous=[(0, 1)], sediments=[],
-         expected_cost=11, time_limit_s=2),
+        rover=(0, 0), battery=2, shadows=[(0, 0)],
+        igneous=[(0, 1)], sediments=[],
+        expected_cost=11, time_limit_s=2),
 
     # casos medianos donde hay que resolver situaciones un poco más interesantes
 
     Case(id="m1", description="3 muestras relativamente cerca",
-         rover=(0, 0), battery=20, shadows=[],
-         igneous=[(0, 1), (0, 2)], sediments=[(1, 1)],
-         expected_cost=18, time_limit_s=30),
+        rover=(0, 0), battery=20, shadows=[],
+        igneous=[(0, 1), (0, 2)], sediments=[(1, 1)],
+        expected_cost=18, time_limit_s=30),
 
     Case(id="m2", description="3 muestras un poco más lejos",
-         rover=(0, 0), battery=20, shadows=[],
-         igneous=[(2, 2), (2, 3)], sediments=[(1, 1)],
-         expected_cost=20, time_limit_s=30),
+        rover=(0, 0), battery=20, shadows=[],
+        igneous=[(2, 2), (2, 3)], sediments=[(1, 1)],
+        expected_cost=20, time_limit_s=30),
 
     Case(id="m3", description="1 muestra lejana",
-         rover=(0, 0), battery=20, shadows=[],
-         igneous=[(0, 30)], sediments=[],
-         expected_cost=40, time_limit_s=30),
+        rover=(0, 0), battery=20, shadows=[],
+        igneous=[(0, 30)], sediments=[],
+        expected_cost=40, time_limit_s=30),
 
     Case(id="m4", description="2 muestras en direcciones opuestas",
-         rover=(0, 0), battery=20, shadows=[],
-         igneous=[(0, -5), (0, 5)], sediments=[],
-         expected_cost=25, time_limit_s=60),
+        rover=(0, 0), battery=20, shadows=[],
+        igneous=[(0, -5), (0, 5)], sediments=[],
+        expected_cost=25, time_limit_s=60),
 
     Case(id="m5", description="1 muestra pero con poca batería y un camino muy específico entre las sombras",
-         rover=(0, 0), battery=8, shadows=[
-             (row, col)
-             for col in range(-10, 10)
-             for row in range(-10, 10)
-             if (row, col) != (0, 7)
-         ],
-         igneous=[(5, 5)], sediments=[],
-         expected_cost=25, time_limit_s=30),
+        rover=(0, 0), battery=8, shadows=[
+            (row, col)
+            for col in range(-10, 10)
+            for row in range(-10, 10)
+            if (row, col) != (0, 7)
+        ],
+        igneous=[(5, 5)], sediments=[],
+        expected_cost=25, time_limit_s=30),
 
     # casos grandes
 
