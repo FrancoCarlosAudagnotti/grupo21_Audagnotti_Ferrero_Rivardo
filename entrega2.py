@@ -22,32 +22,34 @@ def build_camp(camp_size, habs, generators, labs, deposits, airlocks, craters):
         variables.append(f'air_{i}')
 
     #Dominios: 
-    #desempaquetamos en filas y columnas para iterar
+    #desempaquetamos en filas y columnas para optimizar
     filas, columnas = camp_size
     
     # contemplan cráteres, no los agrega, evitamos restricción
     # para 'hab' solo interiores, evitamos restricción
-    dominios_hab = []
-    for fila in range(1, filas - 1):
-        for columna in range(1, columnas - 1):
-            if (fila, columna) not in craters:
-                dominios_hab.append((fila, columna))
-    
-    # para 'air' solo límites, evitamos restricción
-    dominios_air = []
+    dominios_sin_craters = []
+    dominios = {}
+
     for fila in range(filas):
         for columna in range(columnas):
-            if (fila == 0 or fila == filas - 1 or columna == 0 or columna == columnas - 1) and (fila, columna) not in craters:
-                dominios_air.append((fila, columna))
+            if (fila, columna) not in craters:
+                dominios_sin_craters.append((fila, columna))
 
-    dominios = {}
-    for variable in variables:
-        if variable.startswith('hab'):
-            dominios[variable] = dominios_hab.copy()
-        elif variable.startswith('air'):
-            dominios[variable] = dominios_air.copy()
-        else:
-            dominios[variable] = [(fila, columna) for fila in range(filas) for columna in range(columnas) if (fila, columna) not in craters]
+    
+    for var in variables:
+        dominios[var] = []
+        for celda in dominios_sin_craters:
+            fila, columna = celda #mismo criterio que con camp size
+            
+            if (var.startswith("air")):
+                if (fila == 0 or fila == filas - 1 or columna == 0 or columna == columnas - 1):
+                    dominios[var].append(celda)
+            elif (var.startswith("hab")):
+                if (fila != 0 and fila != filas - 1 and columna != 0 and columna != columnas - 1):
+                    dominios[var].append(celda)
+            else:
+                dominios[var] = dominios_sin_craters
+
 
     #Restricciones: 
     restricciones = []
@@ -103,14 +105,16 @@ def build_camp(camp_size, habs, generators, labs, deposits, airlocks, craters):
             (fila_hab, columna_hab + 1), 
             (fila_hab, columna_hab - 1)
         ]
-        
-        bloqueos = 0
-        
-        for pos in values[1:]: # para cada posición ocupada por otro módulo
-            if pos in adyacentes_ortogonales: # si esa posición es adyacente al módulo hab
-                bloqueos += 1
 
-        return bloqueos < 4 # si hay menos de 4 bloqueos, significa que hay al menos una celda adyacente libre
+        for pos in adyacentes_ortogonales:
+            #si es un crater pasa a la siguiente iteracion
+            if pos in craters:
+                continue
+            #sino, corrobora que no sea un modulo
+            if pos not in values[1:]:
+                return True #cómo basta con tener uno libre cuando encuentre el primero devuelve true
+
+        return False
 
     for var1, var2 in combinations(variables, 2):
         restricciones.append(((var1, var2), no_superponen))
@@ -121,14 +125,10 @@ def build_camp(camp_size, habs, generators, labs, deposits, airlocks, craters):
         if var.startswith('lab'):
             restricciones.append(((var, *[v for v in variables if v.startswith('dep')]), lab_dep_adyacentes)) # garantizamos que las variables usadas sean (lab_x, dep_x,....)
         elif var.startswith('hab'):
-            otras_variables = [v for v in variables if v != var] # obtenemos las otras variables para la restricción
-            restricciones.append(((var, *otras_variables), hab_escape_adyacente)) # lo mismo que antes pero lo correspondiente para la restricción 8
+            restricciones.append(((var, *[v for v in variables if v != var]), hab_escape_adyacente)) # lo mismo que antes pero lo correspondiente para la restricción 8
 
     domino = CspProblem(variables, dominios, restricciones)
-    solucion = backtrack(
-        domino,
-        variable_heuristic=MOST_CONSTRAINED_VARIABLE,
-        value_heuristic=LEAST_CONSTRAINING_VALUE,
+    solucion = backtrack( domino, variable_heuristic=MOST_CONSTRAINED_VARIABLE, value_heuristic=LEAST_CONSTRAINING_VALUE,
     )
     if solucion is None:
         return None
