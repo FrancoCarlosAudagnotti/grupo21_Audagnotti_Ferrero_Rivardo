@@ -25,14 +25,14 @@ class RoverProblem(SearchProblem):
         if bateria > 1:
             if taladro != "termico" and igneas:
                 acciones_validas.append(("equipar", "termico"))
-            if taladro != "percusión" and sedimentarias:
-                acciones_validas.append(("equipar", "percusión"))
+            if taladro != "percusion" and sedimentarias:
+                acciones_validas.append(("equipar", "percusion"))
 
         # 4. Perforar y recolectar: Toma 2 minutos, consume 3 batería
         if bateria > 3 and carga < 2:
             if pos in igneas and taladro == "termico":
                 acciones_validas.append(("recolectar", "ignea"))
-            if pos in sedimentarias and taladro == "percusión":
+            if pos in sedimentarias and taladro == "percusion":
                 acciones_validas.append(("recolectar", "sedimentaria"))
 
         # 5. Depositar cápsula: Toma 1 min/muestra, consume 1 batería

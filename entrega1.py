@@ -196,8 +196,7 @@ def planear_rover(
     )
 
     problema = RoverProblem(estado_inicial, tuple(zonas_sombra))
-    #viewer = WebViewer() # BaseViewer() para consola. IMPORTANTE: DESACTIVAR AL ENTREGAR
-    resultado = astar(problema, graph_search=True) #, viewer=viewer)
+    resultado = astar(problema, graph_search=True) 
     acciones = [accion for accion, estado in resultado.path() if accion is not None] #(problema.actions(estado_inicial))
     
     return acciones
