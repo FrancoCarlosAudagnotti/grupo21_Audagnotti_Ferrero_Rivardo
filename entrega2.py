@@ -128,8 +128,7 @@ def build_camp(camp_size, habs, generators, labs, deposits, airlocks, craters):
             restricciones.append(((var, *[v for v in variables if v != var]), hab_escape_adyacente)) # lo mismo que antes pero lo correspondiente para la restricción 8
 
     domino = CspProblem(variables, dominios, restricciones)
-    solucion = backtrack( domino, variable_heuristic=MOST_CONSTRAINED_VARIABLE, value_heuristic=LEAST_CONSTRAINING_VALUE,
-    )
+    solucion = backtrack( domino, variable_heuristic=MOST_CONSTRAINED_VARIABLE, value_heuristic=LEAST_CONSTRAINING_VALUE,)
     if solucion is None:
         return None
 
